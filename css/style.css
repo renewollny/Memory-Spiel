@@ -1,128 +1,90 @@
-#headline {
-    text-align: center;
-    color: red;
+/* Navigationsleiste */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #38444d;
 }
 
-.navbar {
-    background: transparent;
-    padding: 0.3rem 1rem;
-    transition: all 300ms ease-in-out;
-    position: absolute;
-    z-index: 99;
-    top: 0;
-    right: 0;
-    left: 0;
-    opacity: 0;
-  }
+li {
+  float: left;
+}
 
-  .navbar.scroll {
-    background: var(--menu-bg-color);
-    padding: 0.5rem 1rem;
-    position: fixed;
-    opacity: 1;
-  }
+li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
 
-  .navbar-brand {
-    color: var(--white-color);
-    font-weight: var(--font-weight-light);
-    font-size: var(--h4-font-size);
-  }
+li a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
 
-  .navbar .custom-btn {
-    background: var(--primary-color);
-    color: var(--dark-color);
-  }
+li.dropdown {
+  display: inline-block;
+}
 
-  .contact-form #submit-button:hover,
-  .navbar .custom-btn:hover {
-    background: var(--dark-color);
-    color: var(--white-color);
-  }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
 
-  .navbar-expand-lg .navbar-nav .nav-link {
-    margin: 0 1.5rem;
-    padding: 0;
-  }
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
 
-  .nav-item .nav-link.active, 
-  .nav-item .nav-link:hover {
-    color: var(--gray-color);
-  }
+.dropdown-content a:hover {background-color: #f1f1f1;}
 
-  .nav-item .nav-link.active, 
-  .nav-item .nav-link:hover {
-    border-bottom-color: var(--primary-color);
-  }
-
-  .nav-link {
-    color: var(--gray-color);
-    font-weight: var(--font-weight-light);
-    font-size: var(--base-font-size);
-    border-bottom: 1px solid transparent;
-  }
-
-  .navbar-toggler {
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-    margin: 0 10px 0 0;
-    width: 30px;
-    height: 35px;
-    outline: none;
-  }
-
-  .navbar-toggler:focus {
-    outline: none;
-  }
-
-  .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
-    background: transparent;
-  }
-
-  .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before,
-  .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
-    transition: top 300ms 50ms ease, -webkit-transform 300ms 350ms ease;
-    transition: top 300ms 50ms ease, transform 300ms 350ms ease;
-    transition: top 300ms 50ms ease, transform 300ms 350ms ease, -webkit-transform 300ms 350ms ease;
-    top: 0;
-  }
-
-  .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
-    transform: rotate(45deg);
-  }
-
-  .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
-    transform: rotate(-45deg);
-  }
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
 
-  .navbar-toggler .navbar-toggler-icon {
-    background: var(--white-color);
-    transition: background 10ms 300ms ease;
-    display: block;
-    width: 30px;
-    height: 2px;
-    position: relative;
-  }
+/* Spielfeld */
+#board {
+  margin: 40px auto;
+  width: max-content;
+  display: grid;
+  grid-template-columns: repeat(4, 150px);
+  grid-gap: 10px;
+  position: absolute;
+}
 
-  .navbar-toggler .navbar-toggler-icon::before,
-  .navbar-toggler .navbar-toggler-icon::after {
-    transition: top 300ms 350ms ease, -webkit-transform 300ms 50ms ease;
-    transition: top 300ms 350ms ease, transform 300ms 50ms ease;
-    transition: top 300ms 350ms ease, transform 300ms 50ms ease, -webkit-transform 300ms 50ms ease;
-    position: absolute;
-    right: 0;
-    left: 0;
-    background: var(--white-color);
-    width: 30px;
-    height: 2px;
-    content: '';
-  }
+.cell {
+  height: 150px;
+  width: 150px;
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: url(/images/basketball.JPG);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  opacity: 0.4;
+}
 
-  .navbar-toggler .navbar-toggler-icon::before {
-    top: -8px;
-  }
+.cell:hover {
+  background-color: red;
+}
 
-  .navbar-toggler .navbar-toggler-icon::after {
-    top: 8px;
-  }
+.image:hover {
+  background: red;
+}
+
+/* Allgemein */
+body {
+  background-color: #333333;
+  margin: 0;
+}
