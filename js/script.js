@@ -1,8 +1,10 @@
 const board = document.getElementById("board");
 const cells = [];
-const time =document.getElementById("time");
+const time = document.getElementById("time");
 const moves = document.getElementById("moves");
-let size = 4;
+// hier sollte dann die ausgewählte Spielfeldgröße stehen
+let horizontalSize = 4;
+let verticalSize = 4;
 
 const buildingItems = [
     { name: "BigBen", image: "/images/Gebäude/BigBen.jpg" },
@@ -94,6 +96,7 @@ let minutes = 0;
 
 // Züge initieren
 let movesCount = 0;
+let successfulMoves = 0;
 
 // Timer
 const timer = () => {
@@ -111,20 +114,58 @@ const movesCounter = () => {
     moves.innerHTML = "Züge: ${movesCount}";
 };
 
-// Spielfeld erzeugen
-function createBoard() {
-    for (let i = 0; i < size * size; i++) {
-        const cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.classList.add("image");
-        board.appendChild(cell);
-        cells.push(cell);
-        cell.addEventListener("click", function () {
-            makeMove(i)
-        });
+// zufällige Auswahl der Spielkarten
+const randomPick = (horizontalSize, verticalSize) => {
+    // temporäres Array aus der Itemsliste erstellen, damit das Original nicht zerstört wird
+    // hier sollte dann das ausgewählte Muster eingefügt werden
+    let tmp = [...fruitItems];
+    // Anzahl der benötigten Karten definieren --> Teilung durch 2, da ja 2 Karten zum Zuggewinn führen
+    let size = (horizontalSize * verticalSize) / 2;
+    let randomCards = [];
+    // Schleife, um zufällige Auswahl der Karten zu treffen
+    for (let i = 0; i < size; i++) {
+        let randomIndex = Math.floor(Math.random() * tmp.length);
+        randomCards.push(tmp[randomIndex]);
+        // wenn ein Bild ausgewählt wurde, muss dieses auch aus dem temporären Array gelöscht werden, damit es nicht nochmal ausgewählt werden kann
+        tmp.splice(randomIndex, 1);
     };
+    return randomCards;
 };
 
+// Spielkarten mischen
+const shuffledCards = (randomCards, horizontalSize, verticalSize) => {
+    // Array aus den zufälligen Karten * 2 erstellen
+    randomCards = [...randomCards, ...randomCards];
+    // Mischen
+    randomCards.sort(() => Math.random() - 0.5);
+    return randomCards;
+}
 
+// Spielfeld erzeugen
+function createBoard() {
+    // leeres HTML-Feld dem "game"-div zuweisen
+    game.innerHTML = "";
+    for (let i = 0; i < horizontalSize * verticalSize; i++) {
+        // entsprechend der Spielfeldgröße unten genannte Werte in das "game"-div schreiben
+        // zusätzliches Attribut cardValue mit dem Namen der Karte speichern, um damit später den Vergleich zwischen der 1. und 2. Karte zu machen
+        // back = Rückseite der Karte, die stets zu sehen ist, wenn sie nicht aufgedeckt wurde
+        // front = Vorderseite der Karte mit dem entsprechenden Bild dieser Karte
+        game.innerHTML = `
+        <div class="cardsContainer" data-cardValue="${randomCards[i].name}"> 
+            <div class="back"></div>
+            <div class="front">
+            <img src="${randomCards[i].image}" class="image">
+            </div>
+        </div>
+        `;
+    };
 
-createBoard();
+    // Spielfeld final erzeugen
+    let size = horizontalSize * verticalSize;
+    game.style.gridTemplateColumns = `repeat(${size}, auto)`;
+};
+
+// Zug machen
+function makeMove() {
+    
+}

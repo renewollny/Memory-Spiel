@@ -52,11 +52,15 @@ li.dropdown {
 
 
 /* Spielfeld */
+.game {
+  display: flex;
+  justify-content: center;
+}
+
 #board {
   margin: 40px auto;
   width: max-content;
   display: grid;
-  grid-template-columns: repeat(4, 150px);
   grid-gap: 10px;
   position: absolute;
 }
@@ -69,10 +73,13 @@ li.dropdown {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: url(/images/basketball.JPG);
   background-repeat: no-repeat;
   background-size: 100%;
-  opacity: 0.4;
+  /* opacity: 0.4; */
+}
+
+.back {
+  background: url(/images/basketball.JPG);
 }
 
 .cell:hover {
@@ -82,6 +89,15 @@ li.dropdown {
 .image:hover {
   background: red;
 }
+
+button {
+  border: none;
+  /* em ist die Einheit für die Abhängigkeit an der Schriftgröße */
+  border-radius: 0.3em; 
+  padding: 1em 1.5em;
+  cursor: pointer;
+}
+
 
 /* Allgemein */
 body {
