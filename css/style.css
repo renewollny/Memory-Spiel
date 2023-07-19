@@ -1,5 +1,13 @@
-/* Navigationsleiste */
-ul {
+/* em ist die Einheit für die Abhängigkeit an der Schriftgröße */
+
+/* Allgemein */
+body {
+  background-color: #333333;
+  margin: 0;
+}
+
+/* Navigationsleiste für später*/
+/* ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -48,59 +56,83 @@ li.dropdown {
 
 .dropdown:hover .dropdown-content {
   display: block;
-}
+} */
 
 
 /* Spielfeld */
 .game {
-  display: flex;
-  justify-content: center;
-}
-
-#board {
-  margin: 40px auto;
-  width: max-content;
-  display: grid;
-  grid-gap: 10px;
+  box-sizing: content-box;
+  width: 800px;
   position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
 }
 
-.cell {
-  height: 150px;
-  width: 150px;
-  gap: 10px;
+.board {
+  position: relative;
+  width: 100%;
+  display: grid;
+}
+
+.stats {
+  text-align: right;
+}
+
+.cardsContainer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.back, .front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  /* opacity: 0.4; */
 }
 
 .back {
   background: url(/images/basketball.JPG);
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
-.cell:hover {
-  background-color: red;
-}
-
-.image:hover {
-  background: red;
+.controls {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: #333333;
 }
 
 button {
-  border: none;
-  /* em ist die Einheit für die Abhängigkeit an der Schriftgröße */
-  border-radius: 0.3em; 
   padding: 1em 1.5em;
   cursor: pointer;
 }
 
+#stop {
+  font-size: 20px;
+  display: block;
+  background-color: #000000;
+  color: #ffffff;
+}
 
-/* Allgemein */
-body {
-  background-color: #333333;
-  margin: 0;
+.controls button {
+  font-size: 1.3em;
+}
+
+.hide {
+  display: none;
+}
+
+#result {
+  text-align: center;
+  color: white;
 }

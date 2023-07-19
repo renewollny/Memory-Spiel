@@ -1,10 +1,19 @@
-const board = document.getElementById("board");
-const cells = [];
+const board = document.querySelector(".board");
+const startButton = document.getElementById("start");
+const stopButton = document.getElementById("stop");
 const time = document.getElementById("time");
 const moves = document.getElementById("moves");
+const result = document.getElementById("result");
+const controls = document.querySelector(".controls");
+
 // hier sollte dann die ausgewählte Spielfeldgröße stehen
-let horizontalSize = 4;
-let verticalSize = 4;
+// let horizontalSize = 4;
+// let verticalSize = 4;
+
+let firstCard = false;
+let secondCard = false;
+let cards;
+let interval;
 
 const buildingItems = [
     { name: "BigBen", image: "/images/Gebäude/BigBen.jpg" },
@@ -105,23 +114,23 @@ const timer = () => {
         minutes += 1;
         seconds = 0;
     };
-    time.innerHTML = "Time: ${minutes}:${seconds}";
+    time.innerHTML = `Abgelaufene: ${minutes} Minute(n): ${seconds} Sekunde(n)`;
 };
 
 // Züge zählen
 const movesCounter = () => {
     movesCount += 1;
-    moves.innerHTML = "Züge: ${movesCount}";
+    moves.innerHTML = `Züge: ${movesCount}`;
 };
 
 // zufällige Auswahl der Spielkarten
-const randomPick = (horizontalSize, verticalSize) => {
+const randomPick = (size = 4) => {
     // temporäres Array aus der Itemsliste erstellen, damit das Original nicht zerstört wird
     // hier sollte dann das ausgewählte Muster eingefügt werden
     let tmp = [...fruitItems];
-    // Anzahl der benötigten Karten definieren --> Teilung durch 2, da ja 2 Karten zum Zuggewinn führen
-    let size = (horizontalSize * verticalSize) / 2;
     let randomCards = [];
+    // Anzahl der benötigten Karten definieren --> Teilung durch 2, da ja 2 Karten zum Zuggewinn führen
+    size = (size * size) / 2;
     // Schleife, um zufällige Auswahl der Karten zu treffen
     for (let i = 0; i < size; i++) {
         let randomIndex = Math.floor(Math.random() * tmp.length);
@@ -132,25 +141,23 @@ const randomPick = (horizontalSize, verticalSize) => {
     return randomCards;
 };
 
-// Spielkarten mischen
-const shuffledCards = (randomCards, horizontalSize, verticalSize) => {
+// Spielfeld erzeugen
+const game = (randomCards, size = 4) => {
+    // Spielkarten mischen
     // Array aus den zufälligen Karten * 2 erstellen
     randomCards = [...randomCards, ...randomCards];
     // Mischen
     randomCards.sort(() => Math.random() - 0.5);
-    return randomCards;
-}
-
-// Spielfeld erzeugen
-function createBoard() {
-    // leeres HTML-Feld dem "game"-div zuweisen
-    game.innerHTML = "";
-    for (let i = 0; i < horizontalSize * verticalSize; i++) {
-        // entsprechend der Spielfeldgröße unten genannte Werte in das "game"-div schreiben
+    
+    // Spielkarten erzeugen
+    // leeres HTML-Feld dem "board"-div zuweisen
+    board.innerHTML = "";
+    for (let i = 0; i < size * size; i++) {
+        // entsprechend der Spielfeldgröße unten genannte Werte in das "board"-div schreiben
         // zusätzliches Attribut cardValue mit dem Namen der Karte speichern, um damit später den Vergleich zwischen der 1. und 2. Karte zu machen
         // back = Rückseite der Karte, die stets zu sehen ist, wenn sie nicht aufgedeckt wurde
         // front = Vorderseite der Karte mit dem entsprechenden Bild dieser Karte
-        game.innerHTML = `
+        board.innerHTML += `
         <div class="cardsContainer" data-cardValue="${randomCards[i].name}"> 
             <div class="back"></div>
             <div class="front">
@@ -160,12 +167,86 @@ function createBoard() {
         `;
     };
 
-    // Spielfeld final erzeugen
-    let size = horizontalSize * verticalSize;
-    game.style.gridTemplateColumns = `repeat(${size}, auto)`;
+    // Spielfeld erzeugen
+    board.style.gridTemplateColumns = `repeat(${size}, auto)`;
+
+    // Züge machen
+    // alle Karten in einer Variable speichern
+    cards = document.querySelectorAll(".cardsContainer");
+    // über alle karten iterieren
+    cards.forEach((card) => {
+        // bei Klick auf Karte ausführen
+        card.addEventListener("click", () => {
+            // prüfen, ob geklickte Karte noch kein "matched"-Tag hat
+            if (!card.classList.contains("matched")) {
+                // wenn Karte noch kein "matched"-Tag hat, dann "turned"-Tag mitgeben
+                card.classList.add("turned");
+                // prüfen, ob es die erste geklickte Karte ist und deren Namen erhalten
+                if (!firstCard) {
+                    firstCard = card;
+                    firstCardName = card.getAttribute("data-cardValue");
+                } else {
+                    // wenn es bereits die 2. geklickte Karte ist, den Spielzugzähler um 1 erhöhen
+                    movesCounter();
+                    secondCard = card;
+                    // den Namen der 2. Karte erhalten
+                    let secondCardName = card.getAttribute("data-cardValue");
+                    // prüfen, ob der Name der 1. Karte mit dem Namen der 2. Karte übereinstimmt
+                    if (firstCardName == secondCardName) {
+                        // wenn die Namen der beiden Karten übereinstimmen, beiden Karten den "matched"-Tag mitgeben und den Zähler für die erfolgreichen Züge um 1 erhöhen
+                        firstCard.classList.add("matched");
+                        secondCard.classList.add("matched");
+                        firstCard = false;
+                        successfulMoves += 1;
+                        // prüfen, ob die erfolgreichen Züge die Hälfte der gesamten Karten ist, und somit das Spiel gewonnen wurde --> Ausgabe der benötigten Züge
+                        if (successfulMoves == Math.floor(randomCards.length / 2)) {
+                            result.innerHTML = `<h1>Du hast gewonnen!!!</h1>
+                            <h2>Benötigte Spielzüge: ${movesCount}</h2>
+                            <h2>Benötigte Zeit: ${minutes} Minute(n), ${seconds} Sekunde(n)</h2>`;
+                            stopgame();
+                        }
+                    } else {
+                        // wenn die Namen der beiden Karten nicht übereinstimmen, die Karten nach 1 Sekunde wieder zurück auf die Ursprungsansicht (Rückseite) setzen
+                        let tmpFirstCard = firstCard;
+                        let tmpSecondCard = secondCard;
+                        firstCard = false;
+                        secondCard = false;
+                        let delay = setTimeout(() => {
+                            tmpFirstCard.classList.remove("turned");
+                            tmpSecondCard.classList.remove("turned");
+                        }, 1000);
+                    }
+                }
+            }
+        });
+    });
 };
 
-// Zug machen
-function makeMove() {
-    
-}
+// Spiel starten
+startButton.addEventListener("click", () => {
+    movesCount = 0;
+    seconds = 0;
+    minutes = 0;
+    // finalen Bildschirm mit Ergebnissen ausblenden
+    controls.classList.add("hide");
+    startButton.classList.add("hide");
+    // Stop-Button einblenden
+    stopButton.classList.remove("hide");
+    // Timer nach 1 Sekunde laufen lassen
+    interval = setInterval(timer, 1000);
+    moves.innerHTML = `Moves: ${movesCount}`;
+    // Spielen
+    playTheGame();
+});
+
+// Spiel anhalten
+stopButton.addEventListener("click", (stopgame = () => {
+    // // finalen Bildschirm mit Ergebnissen einblenden
+    controls.classList.remove("hide");
+    startButton.classList.remove("hide");
+    // Stop-Button ausblenden
+    stopButton.classList.add("hide");
+    // Timer zurücksetzen
+    clearInterval(interval);
+    })
+);
