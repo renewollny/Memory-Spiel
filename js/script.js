@@ -99,28 +99,28 @@ const animalItems = [
     { name: "Wal", image: "/images/Tiere/Wal.jpg"},
 ];
 
-// Zeit initieren
+// Zeiteinheiten initieren
 let seconds = 0;
 let minutes = 0;
 
-// Züge initieren
+// Spielzüge initieren
 let movesCount = 0;
 let successfulMoves = 0;
 
-// Timer
+// Zeit stoppen und ausgeben
 const timer = () => {
     seconds += 1;
     if (seconds >= 60) {
         minutes += 1;
         seconds = 0;
     };
-    time.innerHTML = `Abgelaufene: ${minutes} Minute(n): ${seconds} Sekunde(n)`;
+    time.innerHTML = `Abgelaufene Zeit: ${minutes} Minute(n): ${seconds} Sekunde(n)`;
 };
 
-// Züge zählen
+// Spielzüge zählen und ausgeben
 const movesCounter = () => {
     movesCount += 1;
-    moves.innerHTML = `Züge: ${movesCount}`;
+    moves.innerHTML = `Spielzüge: ${movesCount}`;
 };
 
 // zufällige Auswahl der Spielkarten
@@ -224,6 +224,7 @@ const game = (randomCards, size = 4) => {
 
 // Spiel starten
 startButton.addEventListener("click", () => {
+    // Statistiken initieren
     movesCount = 0;
     seconds = 0;
     minutes = 0;
@@ -234,7 +235,7 @@ startButton.addEventListener("click", () => {
     stopButton.classList.remove("hide");
     // Timer nach 1 Sekunde laufen lassen
     interval = setInterval(timer, 1000);
-    moves.innerHTML = `Moves: ${movesCount}`;
+    moves.innerHTML = `Spielzüge: ${movesCount}`;
     // Spielen
     playTheGame();
 });
@@ -250,3 +251,14 @@ stopButton.addEventListener("click", (stopgame = () => {
     clearInterval(interval);
     })
 );
+
+// Spielen
+const playTheGame = () => {
+    // Ergebnisbildschirm leer initieren
+    result.innerText = "";
+    // erfolgreiche Züge initieren
+    successfulMoves = 0;
+    // Karten mittels Zufalls-Funktion initieren und der "game"-Konstante übergeben, um zu spielen
+    let cardValues = randomPick();
+    game(cardValues);
+};

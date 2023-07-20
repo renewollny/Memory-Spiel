@@ -1,5 +1,3 @@
-/* em ist die Einheit für die Abhängigkeit an der Schriftgröße */
-
 /* Allgemein */
 body {
   background-color: #333333;
@@ -62,21 +60,26 @@ li.dropdown {
 /* Spielfeld */
 .game {
   box-sizing: content-box;
-  width: 800px;
+  padding: 30px 60px;
+  background-color: white;
   position: absolute;
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
+  border-radius: 10px;
 }
 
 .board {
   position: relative;
   width: 100%;
   display: grid;
+  gap: 10px;
 }
 
 .stats {
   text-align: right;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .cardsContainer {
@@ -88,17 +91,34 @@ li.dropdown {
 
 .back, .front {
   position: absolute;
+  border-radius: 5px;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 4px solid #000000;
+  transition: transform 0.7s;
+  backface-visibility: hidden;
 }
 
 .back {
   background: url(/images/basketball.JPG);
   background-repeat: no-repeat;
   background-size: 100%;
+}
+
+.front {
+  background-color: #ffffff;
+  transform: rotateY(180deg);
+}
+
+.cardsContainer.turned .back {
+  transform: rotateY(180deg);
+}
+
+.cardsContainer.turned .front {
+  transform: rotateY(0deg);
 }
 
 .controls {
@@ -113,19 +133,22 @@ li.dropdown {
 }
 
 button {
-  padding: 1em 1.5em;
+  border: none;
+  border-radius: 5px; 
+  padding: 15px 20px;
   cursor: pointer;
 }
 
 #stop {
   font-size: 20px;
   display: block;
+  margin: 30px auto 0 auto;
   background-color: #000000;
   color: #ffffff;
 }
 
 .controls button {
-  font-size: 1.3em;
+  font-size: 20px;
 }
 
 .hide {
@@ -135,4 +158,13 @@ button {
 #result {
   text-align: center;
   color: white;
+}
+
+#result h1 {
+  font-size: 60px;
+}
+
+#result h2 {
+  font-size: 30px;
+  margin-top: 10px;
 }
