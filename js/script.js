@@ -242,7 +242,7 @@ startButton.addEventListener("click", () => {
 
 // Spiel anhalten
 stopButton.addEventListener("click", (stopgame = () => {
-    // // finalen Bildschirm mit Ergebnissen einblenden
+    // finalen Bildschirm mit Ergebnissen einblenden
     controls.classList.remove("hide");
     startButton.classList.remove("hide");
     // Stop-Button ausblenden
